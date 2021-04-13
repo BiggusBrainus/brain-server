@@ -18,4 +18,11 @@ public class User {
     private String email;
     private String password;
     private Lobby lobby;
+
+    public User(int uid, String username, String email, String password) {
+        this.uid = uid;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 }

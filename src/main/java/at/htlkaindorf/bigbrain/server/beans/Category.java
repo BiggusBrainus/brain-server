@@ -20,4 +20,9 @@ public class Category {
     private int cid;
     private String title;
     private List<Question> questions;
+
+    public Category(int cid, String title) {
+        this.cid = cid;
+        this.title = title;
+    }
 }
