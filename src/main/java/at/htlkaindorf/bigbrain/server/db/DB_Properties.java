@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class DB_Properties {
     private static final Properties PROPS = new Properties();
-    private static final Path PROP_FILE = Paths.get(System.getProperty("user.dir"), "src", "res", "db_access.properties");
+    private static final Path PROP_FILE = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "at", "htlkaindorf", "bigbrain", "server", "res", "db_access.properties");
 
     static {
         try {

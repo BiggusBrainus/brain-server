@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Represents a registered user of the app.
  * @author m4ttm00ny
@@ -24,5 +27,9 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public static User fromResultSet(ResultSet rs) throws SQLException {
+        return new User(rs.getInt("uid"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
     }
 }

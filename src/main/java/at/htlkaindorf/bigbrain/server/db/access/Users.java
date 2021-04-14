@@ -43,17 +43,15 @@ public class Users extends DB_Access {
     private void loadProperties() {
         this.db_url = DB_Properties.getPropertyValue("users_url");
         this.db_driver = DB_Properties.getPropertyValue("driver");
-        this.db_user = DB_Properties.getPropertyValue("db_username");
-        this.db_pass = DB_Properties.getPropertyValue("db_password");
+        this.db_user = DB_Properties.getPropertyValue("users_username");
+        this.db_pass = DB_Properties.getPropertyValue("users_password");
     }
 
     public List<User> getAllUsers() throws SQLException {
         Statement stat = db.getStatement();
         ResultSet rs = stat.executeQuery("SELECT * FROM users");
         List<User> users = new ArrayList<>();
-        while (rs.next()) {
-            users.add(new User(rs.getInt("uid"), rs.getString("username"), rs.getString("email"), rs.getString("password")));
-        }
+        while (rs.next()) users.add(User.fromResultSet(rs));
         return users;
     }
 
@@ -63,10 +61,8 @@ public class Users extends DB_Access {
         }
         getUserByUidStat.setInt(1, uid);
         ResultSet rs = getUserByUidStat.executeQuery();
-        if (!rs.next()) {
-            throw new UnknownUserException(String.format("No user with uid %d found!", uid));
-        }
-        return new User(uid, rs.getString("username"), rs.getString("email"), rs.getString("password"));
+        if (!rs.next()) throw new UnknownUserException(String.format("No user with uid %d found!", uid));
+        return User.fromResultSet(rs);
     }
 
     public User getUserByName(String username) throws SQLException, UnknownUserException {
@@ -75,9 +71,7 @@ public class Users extends DB_Access {
         }
         getUserByNameStat.setString(1, username);
         ResultSet rs = getUserByNameStat.executeQuery();
-        if (!rs.next()) {
-            throw new UnknownUserException(String.format("No user with username \"%s\" found!", username));
-        }
-        return new User(rs.getInt("uid"), username, rs.getString("email"), rs.getString("password"));
+        if (!rs.next()) throw new UnknownUserException(String.format("No user with username \"%s\" found!", username));
+        return User.fromResultSet(rs);
     }
 }

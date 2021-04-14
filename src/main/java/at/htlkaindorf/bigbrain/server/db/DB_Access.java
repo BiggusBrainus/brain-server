@@ -1,6 +1,8 @@
 package at.htlkaindorf.bigbrain.server.db;
 
+import at.htlkaindorf.bigbrain.server.db.access.Questions;
 import at.htlkaindorf.bigbrain.server.db.access.Users;
+import at.htlkaindorf.bigbrain.server.errors.UnknownCategoryException;
 
 import java.sql.SQLException;
 
@@ -22,6 +24,7 @@ public class DB_Access {
             db.disconnect();
         }
         db = new DB_Database(db_url, db_driver, db_user, db_pass);
+        db.connect();
     }
 
     public void disconnect() throws SQLException {

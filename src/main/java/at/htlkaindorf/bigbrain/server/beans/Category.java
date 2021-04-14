@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -19,10 +21,16 @@ import java.util.List;
 public class Category {
     private int cid;
     private String title;
+    private String lang;
     private List<Question> questions;
 
-    public Category(int cid, String title) {
+    public Category(int cid, String title, String lang) {
         this.cid = cid;
         this.title = title;
+        this.lang = lang;
+    }
+
+    public static Category fromResultSet(ResultSet rs) throws SQLException {
+        return new Category(rs.getInt("cid"), rs.getString("title"), rs.getString("lang"));
     }
 }
