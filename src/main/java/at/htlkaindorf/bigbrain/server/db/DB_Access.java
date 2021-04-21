@@ -1,9 +1,5 @@
 package at.htlkaindorf.bigbrain.server.db;
 
-import at.htlkaindorf.bigbrain.server.db.access.Questions;
-import at.htlkaindorf.bigbrain.server.db.access.Users;
-import at.htlkaindorf.bigbrain.server.errors.UnknownCategoryException;
-
 import java.sql.SQLException;
 
 /**

@@ -19,8 +19,8 @@ import java.util.List;
  * @author m4ttm00ny
  */
 
-public class Questions extends DB_Access {
-    private static Questions theInstance = null;
+public class QuestionsAccess extends DB_Access {
+    private static QuestionsAccess theInstance = null;
 
     private final String GET_CATEGORY_BY_ID                     = "SELECT cid, title, lang FROM categories WHERE cid = ?";
     private final String GET_CATEGORIES_BY_LANG_QRY             = "SELECT cid, title, lang FROM categories WHERE lang = ?";
@@ -34,14 +34,14 @@ public class Questions extends DB_Access {
     private PreparedStatement getRandomQuestionsStat            = null;
     private PreparedStatement getRandomCategoryQuestionsStat    = null;
 
-    public static Questions getInstance() throws SQLException, ClassNotFoundException {
+    public static QuestionsAccess getInstance() throws SQLException, ClassNotFoundException {
         if (theInstance == null) {
-            theInstance = new Questions();
+            theInstance = new QuestionsAccess();
         }
         return theInstance;
     }
 
-    private Questions() throws SQLException, ClassNotFoundException {
+    private QuestionsAccess() throws SQLException, ClassNotFoundException {
         loadProperties();
         connect();
     }

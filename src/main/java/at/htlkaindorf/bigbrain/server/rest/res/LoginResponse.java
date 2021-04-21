@@ -17,4 +17,9 @@ public class LoginResponse {
         this.success = success;
         this.token = token;
     }
+
+    public LoginResponse(boolean success, LoginError error) {
+        this.success = success;
+        this.error = error;
+    }
 }

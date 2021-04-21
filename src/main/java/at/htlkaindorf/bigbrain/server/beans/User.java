@@ -29,7 +29,7 @@ public class User {
         this.uid = uid;
         this.username = username;
         this.email = email;
-        this.password = new BCryptPasswordEncoder().encode(plainPassword);
+        this.password = hashPassword(plainPassword);
     }
 
     public User(int uid, String username, String email, byte[] hashedPassword) {
@@ -37,6 +37,16 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = new String(hashedPassword);
+    }
+
+    public User(String username, String email, String plainPassword) {
+        this.username = username;
+        this.email = email;
+        this.password = hashPassword(plainPassword);
+    }
+
+    public String hashPassword(String password) {
+        return new BCryptPasswordEncoder().encode(password);
     }
 
     public boolean checkPassword(String password) {

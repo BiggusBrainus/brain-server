@@ -17,4 +17,9 @@ public class RegisterResponse {
         this.success = success;
         this.token = token;
     }
+
+    public RegisterResponse(boolean success, RegisterError error) {
+        this.success = success;
+        this.error = error;
+    }
 }

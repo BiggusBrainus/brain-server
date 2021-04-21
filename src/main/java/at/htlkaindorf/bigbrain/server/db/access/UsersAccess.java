@@ -2,7 +2,6 @@ package at.htlkaindorf.bigbrain.server.db.access;
 
 import at.htlkaindorf.bigbrain.server.beans.User;
 import at.htlkaindorf.bigbrain.server.db.DB_Access;
-import at.htlkaindorf.bigbrain.server.db.DB_Database;
 import at.htlkaindorf.bigbrain.server.db.DB_Properties;
 import at.htlkaindorf.bigbrain.server.errors.UnknownUserException;
 
@@ -19,23 +18,25 @@ import java.util.List;
  * @author m4ttm00ny
  */
 
-public class Users extends DB_Access {
-    private static Users theInstance = null;
+public class UsersAccess extends DB_Access {
+    private static UsersAccess theInstance = null;
 
     private final String GET_USER_BY_UID_QRY    = "SELECT uid, username, email, password FROM users WHERE uid = ?";
     private final String GET_USER_BY_NAME_QRY   = "SELECT uid, username, email, password FROM users WHERE username = ?";
+    private final String INSERT_USER_QRY        = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
 
     private PreparedStatement getUserByUidStat  = null;
     private PreparedStatement getUserByNameStat = null;
+    private PreparedStatement insertUserStat    = null;
 
-    public static Users getInstance() throws SQLException, ClassNotFoundException {
+    public static UsersAccess getInstance() throws SQLException, ClassNotFoundException {
         if (theInstance == null) {
-            theInstance = new Users();
+            theInstance = new UsersAccess();
         }
         return theInstance;
     }
 
-    private Users() throws SQLException, ClassNotFoundException {
+    private UsersAccess() throws SQLException, ClassNotFoundException {
         loadProperties();
         connect();
     }
@@ -73,5 +74,15 @@ public class Users extends DB_Access {
         ResultSet rs = getUserByNameStat.executeQuery();
         if (!rs.next()) throw new UnknownUserException(String.format("No user with username \"%s\" found!", username));
         return User.fromResultSet(rs);
+    }
+
+    public void createUser(User user) throws SQLException {
+        if (insertUserStat == null) {
+            insertUserStat = db.getConnection().prepareStatement(INSERT_USER_QRY);
+        }
+        insertUserStat.setString(1, user.getUsername());
+        insertUserStat.setString(2, user.getEmail());
+        insertUserStat.setString(3, user.getPassword());
+        insertUserStat.executeUpdate();
     }
 }
