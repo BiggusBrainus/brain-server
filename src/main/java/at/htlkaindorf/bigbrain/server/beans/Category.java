@@ -24,6 +24,11 @@ public class Category {
     private String lang;
     private List<Question> questions;
 
+    public Category(String title, String lang) {
+        this.title = title;
+        this.lang = lang;
+    }
+
     public Category(int cid, String title, String lang) {
         this.cid = cid;
         this.title = title;

@@ -26,6 +26,13 @@ public class Question {
     private String correct;
     private List<String> wrong;
 
+    public Question(String question, Category category, String correct, List<String> wrong) {
+        this.question = question;
+        this.category = category;
+        this.correct = correct;
+        this.wrong = wrong;
+    }
+
     public static Question fromResultSet(ResultSet rs, Category c) throws SQLException {
         List<String> wrong = new ArrayList<>();
         wrong.add(rs.getString("wrong1"));
