@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a certain category a card belogns to.
@@ -37,5 +38,18 @@ public class Category {
 
     public static Category fromResultSet(ResultSet rs) throws SQLException {
         return new Category(rs.getInt("cid"), rs.getString("title"), rs.getString("lang"));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return cid == category.cid;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cid);
     }
 }

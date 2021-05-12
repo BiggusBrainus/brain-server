@@ -9,7 +9,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
  * @author m4ttm00ny
  */
 
-public class WebSocketHandler extends TextWebSocketHandler {
+public class HelloHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         try {

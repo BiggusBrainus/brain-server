@@ -1,5 +1,6 @@
 package at.htlkaindorf.bigbrain.server.beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,9 @@ public class User {
     private int uid;
     private String username;
     private String email;
+    @JsonIgnore
     private String password;
+    @JsonIgnore
     private Lobby lobby;
 
     public User(int uid, String username, String email, String plainPassword) {
