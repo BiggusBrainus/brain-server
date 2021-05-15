@@ -7,5 +7,5 @@ import java.util.List;
 
 @Data
 public class GetLobbiesRequest {
-    private List<Category> categories;
+    private String cids;
 }

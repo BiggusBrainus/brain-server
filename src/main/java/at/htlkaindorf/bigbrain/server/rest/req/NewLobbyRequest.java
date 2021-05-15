@@ -10,5 +10,5 @@ import java.util.List;
 public class NewLobbyRequest {
     private String token;
     private Lobby lobby;
-    private List<Category> categories;
+    private List<Integer> categories;
 }

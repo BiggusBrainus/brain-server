@@ -83,6 +83,17 @@ public class QuestionsAccess extends DB_Access {
         return Category.fromResultSet(rs);
     }
 
+    public List<Category> getCategoriesById(List<Integer> cids) {
+        List<Category> res = new ArrayList<>();
+        for (int cid: cids) {
+            try {
+                res.add(getCategoryById(cid));
+            } catch (SQLException|UnknownCategoryException e) {
+            }
+        }
+        return res;
+    }
+
     public List<Category> getCategoriesByTitle(String title) throws SQLException {
         if (getCategoriesByTitleStat == null) {
             getCategoriesByTitleStat = db.getConnection().prepareStatement(GET_CATEGORIES_BY_TITLE_QRY);

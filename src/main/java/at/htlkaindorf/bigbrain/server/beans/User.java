@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * Represents a registered user of the app.
@@ -58,5 +59,18 @@ public class User {
 
     public static User fromResultSet(ResultSet rs) throws SQLException {
         return new User(rs.getInt("uid"), rs.getString("username"), rs.getString("email"), rs.getString("password").getBytes(StandardCharsets.UTF_8));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return uid == user.uid;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid);
     }
 }
