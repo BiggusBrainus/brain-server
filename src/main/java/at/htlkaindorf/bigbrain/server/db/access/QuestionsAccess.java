@@ -196,6 +196,17 @@ public class QuestionsAccess extends DB_Access {
         return questions;
     }
 
+    public List<Question> getRandomQuestionsFromCategories(int amount, List<Integer> cids) throws UnknownCategoryException, SQLException {
+        if (cids.size() == 1) {
+            return getRandomQuestionsFromCategory(amount, cids.get(0));
+        }
+        List<Question> ret = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            ret.add(getRandomQuestionsFromCategory(1, cids.get((int) (Math.random()*cids.size()))).get(0));
+        }
+        return ret;
+    }
+
     public void insertQuestion(Question question) throws SQLException {
         if (insertQuestionStat == null) {
             insertQuestionStat = db.getConnection().prepareStatement(INSERT_QUESTION_QRY);

@@ -1,8 +1,8 @@
 package at.htlkaindorf.bigbrain.server.rest.res.errors;
 
-public enum JoinLobbyError {
+public enum StartLobbyError {
+    UNKNOWN_LOBBY,
     AUTH_FAILURE,
-    MISSING_LOBBY,
-    ALREADY_IN_GAME,
+    NOT_PART_OF_LOBBY,
     OTHER_ERROR
 }

@@ -3,9 +3,18 @@ package at.htlkaindorf.bigbrain.server.game;
 import at.htlkaindorf.bigbrain.server.beans.Category;
 import at.htlkaindorf.bigbrain.server.beans.Lobby;
 import at.htlkaindorf.bigbrain.server.beans.User;
+import at.htlkaindorf.bigbrain.server.errors.AlreadyInGameError;
 import at.htlkaindorf.bigbrain.server.errors.LobbyExistsError;
+import at.htlkaindorf.bigbrain.server.errors.NotJoinedError;
+import at.htlkaindorf.bigbrain.server.errors.UnknownCategoryException;
+import at.htlkaindorf.bigbrain.server.websockets.LobbyGameHandler;
+import at.htlkaindorf.bigbrain.server.websockets.LobbyGameHandlerActions;
+import at.htlkaindorf.bigbrain.server.websockets.res.LobbyPlayersUpdateResponse;
 import lombok.Data;
+import org.springframework.web.socket.WebSocketSession;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,18 +51,40 @@ public class GameManager {
         userLookup.put(user, lobby);
     }
 
-    public static void joinLobby(User user, Lobby lobby) {
+    public static void joinLobby(User user, Lobby lobby) throws AlreadyInGameError {
+        if (lobby.isInGame()) {
+            throw new AlreadyInGameError("The game has already started!");
+        }
         if (userLookup.containsKey(user)) {
             userLookup.get(user).getPlayers().remove(user);
         }
         lobby.getPlayers().add(user);
         userLookup.put(user, lobby);
+        List<User> players = lobby.getPlayers();
+        lobby.getConnections().forEach((u, s) -> {
+            try {
+                LobbyGameHandler.sendMessage(s, new LobbyPlayersUpdateResponse(players), LobbyGameHandlerActions.LOBBY_PLAYERS_UPDATE);
+            } catch (IOException e) {
+            }
+        });
+    }
+
+    public static void connectToLobby(User user, WebSocketSession session) throws NotJoinedError {
+        if (user.getLobby() == null || getLobby(user.getLobby().getName()) == null || !user.getLobby().getPlayers().contains(user)) {
+            throw new NotJoinedError("Join a lobby first!");
+        }
+        user.getLobby().getConnections().put(user, session);
+    }
+
+    public static void startLobby(Lobby lobby) throws UnknownCategoryException, SQLException, ClassNotFoundException {
+        lobby.setGame(new Game(lobby));
     }
 
     public static void leaveLobby(User user) {
         if (userLookup.containsKey(user)) {
             Lobby lobby = userLookup.get(user);
             lobby.getPlayers().remove(user);
+            lobby.getConnections().remove(user);
             if (lobby.getPlayers().isEmpty()) {
                 lobbyLookup.remove(lobby.getName());
             }

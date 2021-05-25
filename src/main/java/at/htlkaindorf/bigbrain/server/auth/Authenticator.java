@@ -3,6 +3,7 @@ package at.htlkaindorf.bigbrain.server.auth;
 import at.htlkaindorf.bigbrain.server.beans.User;
 import at.htlkaindorf.bigbrain.server.db.access.UsersAccess;
 import at.htlkaindorf.bigbrain.server.errors.AuthError;
+import at.htlkaindorf.bigbrain.server.errors.InvalidSignatureError;
 import at.htlkaindorf.bigbrain.server.errors.UnknownUserException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -40,8 +41,13 @@ public class Authenticator {
         }
     }
 
-    public static User getUser(String token) throws SQLException, ClassNotFoundException, UnknownUserException {
-        Jws<Claims> jws = Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJws(token);
+    public static User getUser(String token) throws SQLException, ClassNotFoundException, UnknownUserException, InvalidSignatureError {
+        Jws<Claims> jws;
+        try {
+            jws = Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJws(token);
+        } catch (SignatureException e) {
+            throw new InvalidSignatureError("Signature doesn't work out ... ");
+        }
         UsersAccess acc = UsersAccess.getInstance();
         return acc.getUserByName(jws.getBody().getSubject());
     }
