@@ -5,6 +5,7 @@ import at.htlkaindorf.bigbrain.server.db.access.UsersAccess;
 import at.htlkaindorf.bigbrain.server.errors.AuthError;
 import at.htlkaindorf.bigbrain.server.errors.InvalidSignatureError;
 import at.htlkaindorf.bigbrain.server.errors.UnknownUserException;
+import at.htlkaindorf.bigbrain.server.game.GameManager;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -49,6 +50,8 @@ public class Authenticator {
             throw new InvalidSignatureError("Signature doesn't work out ... ");
         }
         UsersAccess acc = UsersAccess.getInstance();
-        return acc.getUserByName(jws.getBody().getSubject());
+        User u = acc.getUserByName(jws.getBody().getSubject());;
+        GameManager.makePlayer(u);
+        return u;
     }
 }

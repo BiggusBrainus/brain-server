@@ -6,9 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class WebSocketResponseWrapper {
-    private LobbyGameHandlerActions action;
-    private WebSocketResponse body;
+public class StartLobbyResponse extends WebSocketResponse {
+    public StartLobbyResponse() {
+        this.action = LobbyGameHandlerActions.START_GAME;
+    }
 }

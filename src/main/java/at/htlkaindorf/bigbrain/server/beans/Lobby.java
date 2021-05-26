@@ -1,12 +1,17 @@
 package at.htlkaindorf.bigbrain.server.beans;
 
 import at.htlkaindorf.bigbrain.server.game.Game;
+import at.htlkaindorf.bigbrain.server.websockets.LobbyGameHandler;
+import at.htlkaindorf.bigbrain.server.websockets.LobbyGameHandlerActions;
+import at.htlkaindorf.bigbrain.server.websockets.res.LobbyPlayersUpdateResponse;
+import at.htlkaindorf.bigbrain.server.websockets.res.WebSocketResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,5 +43,14 @@ public class Lobby {
 
     public boolean isInGame() {
         return game != null;
+    }
+
+    public void broadcast(WebSocketResponse res) {
+        getConnections().forEach((u, s) -> {
+            try {
+                LobbyGameHandler.sendMessage(s, res);
+            } catch (IOException e) {
+            }
+        });
     }
 }
