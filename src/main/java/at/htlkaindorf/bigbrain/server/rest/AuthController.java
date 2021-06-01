@@ -36,10 +36,10 @@ public class AuthController {
             try {
                 return new ResponseEntity<>(new LoginResponse(true, Authenticator.login(req.getUsername(), req.getPassword())), HttpStatus.OK);
             } catch (UnknownUserException|AuthError e) {
-                return new ResponseEntity<>(new LoginResponse(false, LoginError.UNKNOWN_CREDS), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new LoginResponse(false, LoginError.UNKNOWN_CREDS), HttpStatus.OK);
             }
         } catch (SQLException|ClassNotFoundException e) {
-            return new ResponseEntity<>(new LoginResponse(false, LoginError.OTHER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new LoginResponse(false, LoginError.OTHER_ERROR), HttpStatus.OK);
         }
     }
 
@@ -49,13 +49,13 @@ public class AuthController {
             UsersAccess acc = UsersAccess.getInstance();
             try {
                 acc.getUserByName(req.getUsername());
-                return new ResponseEntity<>(new RegisterResponse(false, RegisterError.USERNAME_TAKEN), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new RegisterResponse(false, RegisterError.USERNAME_TAKEN), HttpStatus.OK);
             } catch (UnknownUserException e) {
                 acc.createUser(new User(req.getUsername(), req.getEmail(), req.getPassword()));
                 return new ResponseEntity<>(new RegisterResponse(true, Authenticator.getAuthToken(req.getUsername())), HttpStatus.OK);
             }
         } catch (SQLException|ClassNotFoundException e) {
-            return new ResponseEntity<>(new RegisterResponse(false, RegisterError.OTHER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new RegisterResponse(false, RegisterError.OTHER_ERROR), HttpStatus.OK);
         }
     }
 

@@ -1,5 +1,6 @@
 package at.htlkaindorf.bigbrain.server.beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Category {
     private int cid;
     private String title;
     private String lang;
+    @JsonIgnore
     private List<Question> questions;
 
     public Category(String title, String lang) {
