@@ -1,6 +1,7 @@
 package at.htlkaindorf.bigbrain.server.beans;
 
 import at.htlkaindorf.bigbrain.server.game.Game;
+import at.htlkaindorf.bigbrain.server.game.GameManager;
 import at.htlkaindorf.bigbrain.server.websockets.LobbyGameHandler;
 import at.htlkaindorf.bigbrain.server.websockets.LobbyGameHandlerActions;
 import at.htlkaindorf.bigbrain.server.websockets.res.LobbyPlayersUpdateResponse;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,11 +48,15 @@ public class Lobby {
     }
 
     public void broadcast(WebSocketResponse res) {
+        List<User> disconnect = new ArrayList<>();
         getConnections().forEach((u, s) -> {
             try {
                 LobbyGameHandler.sendMessage(s, res);
             } catch (IOException e) {
+            } catch (IllegalStateException e) {
+                disconnect.add(u);
             }
         });
+        disconnect.forEach(u -> GameManager.leaveLobby(u));
     }
 }

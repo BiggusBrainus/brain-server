@@ -51,6 +51,8 @@ public class LobbyGameHandler extends TextWebSocketHandler {
 
     private void connectToLobby(WebSocketSession session, String msg) throws IOException {
         ConnectToLobbyRequest req = mapper.readValue(msg, ConnectToLobbyRequest.class);
+        // System.out.printf("[*] MSG: \"%s\"\n", msg);
+        // System.out.printf("[*] NEW CONNECTION TO LOBBY USING TOKEN %s!\n", req.getToken());
         try {
             User user = Authenticator.getUser(req.getToken());
             GameManager.connectToLobby(user, session);

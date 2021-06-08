@@ -74,7 +74,9 @@ public class GameManager {
         if (user.getLobby() == null || getLobby(user.getLobby().getName()) == null || !user.getLobby().getPlayers().contains(user)) {
             throw new NotJoinedError("Join a lobby first!");
         }
-        user.getLobby().getConnections().put(user, session);
+        Lobby lobby = user.getLobby();
+        lobby.getConnections().put(user, session);
+        lobby.broadcast(new LobbyPlayersUpdateResponse(lobby.getPlayers()));
     }
 
     public static void startLobby(Lobby lobby) throws UnknownCategoryException, SQLException, ClassNotFoundException {

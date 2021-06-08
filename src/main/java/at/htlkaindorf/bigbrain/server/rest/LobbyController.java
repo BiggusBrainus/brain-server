@@ -44,11 +44,11 @@ public class LobbyController {
             GameManager.newLobby(req.getLobby().getName(), user, acc.getCategoriesById(req.getCategories()));
             return new ResponseEntity<>(new NewLobbyResponse(), HttpStatus.OK);
         } catch (UnknownUserException|InvalidSignatureError e) {
-            return new ResponseEntity<>(new NewLobbyResponse(NewLobbyError.AUTH_FAILURE), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new NewLobbyResponse(NewLobbyError.AUTH_FAILURE), HttpStatus.OK);
         } catch (SQLException|ClassNotFoundException e) {
-            return new ResponseEntity<>(new NewLobbyResponse(NewLobbyError.OTHER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new NewLobbyResponse(NewLobbyError.OTHER_ERROR), HttpStatus.OK);
         } catch (LobbyExistsError lobbyExistsError) {
-            return new ResponseEntity<>(new NewLobbyResponse(NewLobbyError.LOBBY_NAME_TAKEN), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new NewLobbyResponse(NewLobbyError.LOBBY_NAME_TAKEN), HttpStatus.OK);
         }
     }
 
@@ -61,7 +61,7 @@ public class LobbyController {
                 acc = QuestionsAccess.getInstance();
                 categories = acc.getCategoriesById(Arrays.stream(cids.split(",")).map(Integer::parseInt).collect(Collectors.toList()));
             } catch (SQLException|ClassNotFoundException e) {
-                return new ResponseEntity<>(new GetLobbiesResponse(GetLobbiesError.OTHER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(new GetLobbiesResponse(GetLobbiesError.OTHER_ERROR), HttpStatus.OK);
             }
         }
         List<Lobby> lobbies = GameManager.getLobbiesByCategories(categories);
@@ -71,37 +71,34 @@ public class LobbyController {
     @PostMapping(value = "/join", consumes = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<JoinLobbyResponse> join(@RequestBody JoinLobbyRequest req) {
         if (req.getLobby() == null || !GameManager.isLobby(req.getLobby())) {
-            return new ResponseEntity<>(new JoinLobbyResponse(JoinLobbyError.MISSING_LOBBY), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new JoinLobbyResponse(JoinLobbyError.MISSING_LOBBY), HttpStatus.OK);
         }
         try {
             User user = Authenticator.getUser(req.getToken());
             GameManager.joinLobby(user, GameManager.getLobby(req.getLobby()));
             return new ResponseEntity<>(new JoinLobbyResponse(), HttpStatus.OK);
         } catch (SQLException|ClassNotFoundException e) {
-            return new ResponseEntity<>(new JoinLobbyResponse(JoinLobbyError.OTHER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new JoinLobbyResponse(JoinLobbyError.OTHER_ERROR), HttpStatus.OK);
         } catch (UnknownUserException|InvalidSignatureError e) {
-            return new ResponseEntity<>(new JoinLobbyResponse(JoinLobbyError.AUTH_FAILURE), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new JoinLobbyResponse(JoinLobbyError.AUTH_FAILURE), HttpStatus.OK);
         } catch (AlreadyInGameError alreadyInGameError) {
-            return new ResponseEntity<>(new JoinLobbyResponse(JoinLobbyError.ALREADY_IN_GAME), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new JoinLobbyResponse(JoinLobbyError.ALREADY_IN_GAME), HttpStatus.OK);
         }
     }
 
     @PostMapping(value = "/start", consumes = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<StartLobbyResponse> start(@RequestBody StartLobbyRequest req) {
-        if (req.getLobby() == null || !GameManager.isLobby(req.getLobby())) {
-            return new ResponseEntity<>(new StartLobbyResponse(StartLobbyError.UNKNOWN_LOBBY), HttpStatus.BAD_REQUEST);
-        }
         try {
             User user = Authenticator.getUser(req.getToken());
-            if (GameManager.getLobby(req.getLobby()).getPlayers().contains(user)) {
-                GameManager.startLobby(GameManager.getLobby(req.getLobby()));
+            if (user.getLobby() != null) {
+                GameManager.startLobby(user.getLobby());
                 return new ResponseEntity<>(new StartLobbyResponse(), HttpStatus.OK);
             }
-            return new ResponseEntity<>(new StartLobbyResponse(StartLobbyError.NOT_PART_OF_LOBBY), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new StartLobbyResponse(StartLobbyError.NOT_PART_OF_LOBBY), HttpStatus.OK);
         } catch (SQLException|ClassNotFoundException|UnknownCategoryException e) {
-            return new ResponseEntity<>(new StartLobbyResponse(StartLobbyError.OTHER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new StartLobbyResponse(StartLobbyError.OTHER_ERROR), HttpStatus.OK);
         } catch (UnknownUserException|InvalidSignatureError e) {
-            return new ResponseEntity<>(new StartLobbyResponse(StartLobbyError.AUTH_FAILURE), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new StartLobbyResponse(StartLobbyError.AUTH_FAILURE), HttpStatus.OK);
         }
     }
 
@@ -112,9 +109,9 @@ public class LobbyController {
             GameManager.leaveLobby(user);
             return new ResponseEntity<>(new LeaveLobbyResponse(), HttpStatus.OK);
         } catch (SQLException|ClassNotFoundException e) {
-            return new ResponseEntity<>(new LeaveLobbyResponse(LeaveLobbyError.OTHER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new LeaveLobbyResponse(LeaveLobbyError.OTHER_ERROR), HttpStatus.OK);
         } catch (UnknownUserException|InvalidSignatureError e) {
-            return new ResponseEntity<>(new LeaveLobbyResponse(LeaveLobbyError.AUTH_FAILURE), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new LeaveLobbyResponse(LeaveLobbyError.AUTH_FAILURE), HttpStatus.OK);
         }
     }
 }

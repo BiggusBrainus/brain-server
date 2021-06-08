@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StartLobbyRequest {
     private String token;
-    private String lobby;
 }
