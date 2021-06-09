@@ -82,6 +82,7 @@ public class GameManager {
     public static void startLobby(Lobby lobby) throws UnknownCategoryException, SQLException, ClassNotFoundException {
         lobby.setGame(new Game(lobby));
         lobby.broadcast(new StartLobbyResponse());
+        lobby.getGame().startGame();
     }
 
     public static void leaveLobby(User user) {

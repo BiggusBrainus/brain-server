@@ -6,10 +6,13 @@ import at.htlkaindorf.bigbrain.server.errors.InvalidSignatureError;
 import at.htlkaindorf.bigbrain.server.errors.NotJoinedError;
 import at.htlkaindorf.bigbrain.server.errors.UnknownUserException;
 import at.htlkaindorf.bigbrain.server.game.GameManager;
+import at.htlkaindorf.bigbrain.server.websockets.req.AnswerRequest;
 import at.htlkaindorf.bigbrain.server.websockets.req.ConnectToLobbyRequest;
 import at.htlkaindorf.bigbrain.server.websockets.req.WebSocketRequest;
+import at.htlkaindorf.bigbrain.server.websockets.res.AnswerResponse;
 import at.htlkaindorf.bigbrain.server.websockets.res.ConnectToLobbyResponse;
 import at.htlkaindorf.bigbrain.server.websockets.res.WebSocketResponse;
+import at.htlkaindorf.bigbrain.server.websockets.res.errors.AnswerError;
 import at.htlkaindorf.bigbrain.server.websockets.res.errors.ConnectToLobbyError;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.TextMessage;
@@ -38,6 +41,9 @@ public class LobbyGameHandler extends TextWebSocketHandler {
                 case CONNECT_TO_LOBBY:
                     connectToLobby(session, msg);
                     break;
+                case ANSWER:
+                    answerQuestion(session, msg);
+                    break;
             }
         } catch (Exception e) {
             System.out.println("ERROR " + e.getMessage());
@@ -62,6 +68,18 @@ public class LobbyGameHandler extends TextWebSocketHandler {
             sendMessage(session, new ConnectToLobbyResponse(ConnectToLobbyError.AUTH_FAILURE));
         } catch (NotJoinedError notJoinedError) {
             sendMessage(session, new ConnectToLobbyResponse(ConnectToLobbyError.NOT_A_MEMBER));
+        }
+    }
+
+    private void answerQuestion(WebSocketSession session, String msg) throws IOException {
+        AnswerRequest req = mapper.readValue(msg, AnswerRequest.class);
+        try {
+            User user = Authenticator.getUser(req.getToken());
+            user.getLobby().getGame().submitAnswer(user, req.getQuestion(), req.getAnswer());
+        } catch (SQLException|ClassNotFoundException e) {
+            sendMessage(session, new AnswerResponse(AnswerError.OTHER_ERROR));
+        } catch (UnknownUserException|InvalidSignatureError e) {
+            sendMessage(session, new AnswerResponse(AnswerError.AUTH_FAILURE));
         }
     }
 }
