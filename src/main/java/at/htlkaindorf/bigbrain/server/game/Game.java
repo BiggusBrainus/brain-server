@@ -2,6 +2,7 @@ package at.htlkaindorf.bigbrain.server.game;
 
 import at.htlkaindorf.bigbrain.server.beans.*;
 import at.htlkaindorf.bigbrain.server.db.access.QuestionsAccess;
+import at.htlkaindorf.bigbrain.server.db.access.UsersAccess;
 import at.htlkaindorf.bigbrain.server.errors.UnknownCategoryException;
 import at.htlkaindorf.bigbrain.server.websockets.LobbyGameHandler;
 import at.htlkaindorf.bigbrain.server.websockets.res.EndOfGameResponse;
@@ -49,6 +50,12 @@ public class Game {
 
     public void endGame() {
         List<Rank> ranking = scores.keySet().stream().map(u -> new Rank(u, scores.get(u).stream().filter(b -> b).count())).collect(Collectors.toList());
-        lobby.broadcast(new EndOfGameResponse(ranking));
+        try {
+            UsersAccess acc = UsersAccess.getInstance();
+            acc.addGame(ranking.get(0).getUser());
+        } catch (SQLException|ClassNotFoundException e) {
+        } finally {
+            lobby.broadcast(new EndOfGameResponse(ranking));
+        }
     }
 }
