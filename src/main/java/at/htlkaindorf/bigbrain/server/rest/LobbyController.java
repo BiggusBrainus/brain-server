@@ -68,6 +68,16 @@ public class LobbyController {
         return new ResponseEntity<>(new GetLobbiesResponse(lobbies), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/categories", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GetCategoriesResponse> categories() {
+        try {
+            QuestionsAccess acc = QuestionsAccess.getInstance();
+            return new ResponseEntity<>(new GetCategoriesResponse(acc.getAllCategories()), HttpStatus.OK);
+        } catch (SQLException|ClassNotFoundException e) {
+            return new ResponseEntity<>(new GetCategoriesResponse(GetCategoriesError.OTHER_ERROR), HttpStatus.OK);
+        }
+    }
+
     @PostMapping(value = "/join", consumes = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<JoinLobbyResponse> join(@RequestBody JoinLobbyRequest req) {
         if (req.getLobby() == null || !GameManager.isLobby(req.getLobby())) {
