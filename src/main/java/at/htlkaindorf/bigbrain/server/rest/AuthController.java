@@ -39,6 +39,7 @@ public class AuthController {
                 return new ResponseEntity<>(new LoginResponse(false, LoginError.UNKNOWN_CREDS), HttpStatus.OK);
             }
         } catch (SQLException|ClassNotFoundException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(new LoginResponse(false, LoginError.OTHER_ERROR), HttpStatus.OK);
         }
     }

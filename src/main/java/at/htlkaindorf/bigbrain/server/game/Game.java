@@ -1,9 +1,6 @@
 package at.htlkaindorf.bigbrain.server.game;
 
-import at.htlkaindorf.bigbrain.server.beans.Category;
-import at.htlkaindorf.bigbrain.server.beans.Lobby;
-import at.htlkaindorf.bigbrain.server.beans.Question;
-import at.htlkaindorf.bigbrain.server.beans.User;
+import at.htlkaindorf.bigbrain.server.beans.*;
 import at.htlkaindorf.bigbrain.server.db.access.QuestionsAccess;
 import at.htlkaindorf.bigbrain.server.errors.UnknownCategoryException;
 import at.htlkaindorf.bigbrain.server.websockets.LobbyGameHandler;
@@ -27,7 +24,7 @@ public class Game {
         questions = acc.getRandomQuestionsFromCategories(5, lobby.getCategories().stream().map(Category::getCid).collect(Collectors.toList()));
         submissions = new ArrayList<>(Arrays.asList(new Integer[5]));
         Collections.fill(submissions, 0);
-        lobby.getPlayers().forEach(p -> scores.put(p, new ArrayList<>()));
+        lobby.getPlayers().forEach(p -> scores.put(p, new ArrayList<>(Arrays.asList(new Boolean[5]))));
     }
 
     public void startGame() {
@@ -35,6 +32,8 @@ public class Game {
     }
 
     public void submitAnswer(User player, int question, String answer) throws IOException {
+        // has already submitted answer, just ignore ...
+        if (scores.get(player).get(question) != null) return;
         scores.get(player).set(question, questions.get(question).getCorrect().equals(answer));
         submissions.set(question, submissions.get(question)+1);
         // compare with current number of players, because someone
@@ -49,7 +48,7 @@ public class Game {
     }
 
     public void endGame() {
-        List<AbstractMap.SimpleEntry<User, Long>> ranking = scores.keySet().stream().map(u -> new AbstractMap.SimpleEntry<>(u, scores.get(u).stream().filter(b -> b).count())).collect(Collectors.toList());
+        List<Rank> ranking = scores.keySet().stream().map(u -> new Rank(u, scores.get(u).stream().filter(b -> b).count())).collect(Collectors.toList());
         lobby.broadcast(new EndOfGameResponse(ranking));
     }
 }
