@@ -41,7 +41,7 @@ public class LobbyController {
         try {
             User user = Authenticator.getUser(req.getToken());
             QuestionsAccess acc = QuestionsAccess.getInstance();
-            GameManager.newLobby(req.getLobby().getName(), user, acc.getCategoriesById(req.getCategories()));
+            GameManager.newLobby(req.getLobby().getName(), user, acc.getCategoriesById(req.getCategories()), req.getLobby().isHidden());
             return new ResponseEntity<>(new NewLobbyResponse(), HttpStatus.OK);
         } catch (UnknownUserException|InvalidSignatureError e) {
             return new ResponseEntity<>(new NewLobbyResponse(NewLobbyError.AUTH_FAILURE), HttpStatus.OK);

@@ -32,15 +32,17 @@ public class Lobby {
     private String name;
     private List<User> players;
     private List<Category> categories;
+    private boolean hidden;
     @JsonIgnore
     private Game game;
     @JsonIgnore
     private Map<User, WebSocketSession> connections = new HashMap<>();
 
-    public Lobby(String name, List<User> players, List<Category> categories) {
+    public Lobby(String name, List<User> players, List<Category> categories, boolean hidden) {
         this.name = name;
         this.players = players;
         this.categories = categories;
+        this.hidden = hidden;
     }
 
     public boolean isInGame() {

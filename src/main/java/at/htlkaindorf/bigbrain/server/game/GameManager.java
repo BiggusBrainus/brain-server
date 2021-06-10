@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Data
@@ -36,11 +37,11 @@ public class GameManager {
     }
 
     public static List<Lobby> getLobbies() {
-        return new ArrayList<>(lobbyLookup.values());
+        return lobbyLookup.values().stream().filter(Predicate.not(Lobby::isHidden)).collect(Collectors.toList());
     }
 
     public static List<Lobby> getLobbiesByCategories(List<Category> categories) {
-        return categories != null && categories.size() > 0 ? lobbyLookup.values().stream().filter(l -> l.getCategories().stream().anyMatch(categories::contains)).collect(Collectors.toList()) : getLobbies();
+        return categories != null && categories.size() > 0 ? lobbyLookup.values().stream().filter(l -> !l.isHidden() && l.getCategories().stream().anyMatch(categories::contains)).collect(Collectors.toList()) : getLobbies();
     }
 
     public static void makePlayer(User user) {
@@ -50,10 +51,15 @@ public class GameManager {
     }
 
     public static void newLobby(String name, User user, List<Category> categories) throws LobbyExistsError {
+        newLobby(name, user, categories, false);
+    }
+
+    public static void newLobby(String name, User user, List<Category> categories, boolean hidden) throws LobbyExistsError {
         if (isLobby(name)) {
             throw new LobbyExistsError("This lobby name is already taken!");
         }
-        Lobby lobby = new Lobby(name, new ArrayList<>(){{add(user);}}, categories);
+        leaveLobby(user);
+        Lobby lobby = new Lobby(name, new ArrayList<>(){{add(user);}}, categories, hidden);
         lobbyLookup.put(name, lobby);
         userLookup.put(user, lobby);
     }
@@ -62,9 +68,7 @@ public class GameManager {
         if (lobby.isInGame()) {
             throw new AlreadyInGameError("The game has already started!");
         }
-        if (userLookup.containsKey(user)) {
-            userLookup.get(user).getPlayers().remove(user);
-        }
+        leaveLobby(user);
         lobby.getPlayers().add(user);
         userLookup.put(user, lobby);
         lobby.broadcast(new LobbyPlayersUpdateResponse(lobby.getPlayers()));
