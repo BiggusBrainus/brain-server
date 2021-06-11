@@ -16,6 +16,8 @@ import java.util.List;
 /**
  * DB Access class for all operations using the
  * `users` table in the user database.
+ * @version BigBrain v1
+ * @since 21.04.2021
  * @author m4ttm00ny
  */
 

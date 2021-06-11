@@ -23,7 +23,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- *
+ * The WebSocket handler for all lobby & game
+ * actions - listens on the /ws/game endpoint.
+ * @version BigBrain v1
+ * @since 25.05.2021
  * @author m4ttm00ny
  */
 

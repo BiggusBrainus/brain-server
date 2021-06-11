@@ -24,6 +24,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.crypto.SecretKey;
 import java.sql.SQLException;
 
+/**
+ * The REST Controller for the /auth
+ * URL endpoints - like the name suggests, 
+ * it deals with user authentication.
+ * @version BigBrain v1
+ * @since 20.04.2021
+ * @author m4ttm00ny
+ */
+
 @RestController
 @RequestMapping(value = "/auth")
 public class AuthController {

@@ -13,6 +13,8 @@ import java.util.List;
  * Represents a question for the game. At the moment,
  * there is always exactly one correct answer string
  * and multiple incorrect answer strings.
+ * @version BigBrain v1
+ * @since 07.04.2021
  * @author m4ttm00ny
  */
 

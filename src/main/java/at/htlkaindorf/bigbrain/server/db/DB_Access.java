@@ -4,6 +4,8 @@ import java.sql.SQLException;
 
 /**
  * Template class for all DB access classes.
+ * @version BigBrain v1
+ * @since 13.04.2021
  * @author m4ttm00ny
  */
 

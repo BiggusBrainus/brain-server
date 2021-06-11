@@ -8,6 +8,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Represents a question as returned
+ * from the TDB API.
+ * @version BigBrain v1
+ * @since 05.05.2021
+ * @author m4ttm00ny
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

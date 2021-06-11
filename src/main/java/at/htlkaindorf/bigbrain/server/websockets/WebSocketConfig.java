@@ -6,7 +6,10 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 /**
- *
+ * The WebSocketConfig assigning each WebSocketHandler
+ * to their listener endpoint.
+ * @version BigBrain v1
+ * @since 07.04.2021
  * @author m4ttm00ny
  */
 

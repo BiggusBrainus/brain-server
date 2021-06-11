@@ -9,6 +9,15 @@ import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
 
+/**
+ * The JSON Deserializer for a TDBQuestion's
+ * question string, because it contains HTML
+ * character escape codes.
+ * @version BigBrain v1
+ * @since 05.05.2021
+ * @author m4ttm00ny
+ */
+
 public class TDBQuestionQuestionDeserializer extends StdDeserializer<String> {
 
     public TDBQuestionQuestionDeserializer() {

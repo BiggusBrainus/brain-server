@@ -6,7 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- *
+ * Represents the actual database. Can
+ * be connected/disconnected to, etc.
+ * @version BigBrain v1
+ * @since 13.04.2021
  * @author m4ttm00ny
  */
 

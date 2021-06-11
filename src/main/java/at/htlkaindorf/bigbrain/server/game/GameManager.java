@@ -23,6 +23,14 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+/**
+ * This class contains all current lobbies and
+ * deals with the logic surrounding them.
+ * @version BigBrain v1
+ * @since 15.05.2021
+ * @author m4ttm00ny
+ */
+
 @Data
 public class GameManager {
     private static Map<String, Lobby> lobbyLookup = new HashMap<>();

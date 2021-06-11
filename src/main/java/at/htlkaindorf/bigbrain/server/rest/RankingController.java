@@ -15,6 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * The REST Controller for the /ranking
+ * URL endpoints - like the name suggests,
+ * it deals with actions concerning the
+ * overall user ranking.
+ * @version BigBrain v1
+ * @since 10.06.2021
+ * @author m4ttm00ny
+ */
+
 @RestController
 @RequestMapping(value = "/ranking")
 public class RankingController {

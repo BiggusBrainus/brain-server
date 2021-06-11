@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 /**
- *
+ * @version BigBrain v1
+ * @since 07.04.2021
  * @author m4ttm00ny
  */
 

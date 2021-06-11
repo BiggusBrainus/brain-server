@@ -7,7 +7,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- *
+ * A "cached" Database connection for
+ * recycling SQL Statements.
+ * @version BigBrain v1
+ * @since 13.04.2021
  * @author m4ttm00ny
  */
 

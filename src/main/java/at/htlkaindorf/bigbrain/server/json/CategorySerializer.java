@@ -8,7 +8,11 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 
 /**
- *
+ * The JSON serializer for a Category object.
+ * Used so catgories are only numbers in JSON
+ * format.
+ * @version BigBrain v1
+ * @since 07.04.2021
  * @author m4ttm00ny
  */
 

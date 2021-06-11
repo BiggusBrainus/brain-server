@@ -5,7 +5,10 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 /**
- *
+ * A test websocket handler - listens
+ * on the /ws/hello endpoint.
+ * @version BigBrain v1
+ * @since 12.05.2021
  * @author m4ttm00ny
  */
 

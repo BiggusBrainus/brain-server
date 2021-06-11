@@ -13,6 +13,14 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Contains the actual game logic. This is
+ * a game that was started in a certain lobby.
+ * @version BigBrain v1
+ * @since 25.05.2021
+ * @author m4ttm00ny
+ */
+
 public class Game {
     private Lobby lobby;
     private List<Question> questions;

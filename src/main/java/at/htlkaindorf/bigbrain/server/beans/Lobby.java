@@ -22,6 +22,8 @@ import java.util.Map;
  * Represents a game lobby. Multiple users can be
  * in a lobby as players. The lobby can have multiple
  * card categories selected. Cards will be picked from these.
+ * @version BigBrain v1
+ * @since 07.04.2021
  * @author m4ttm00ny
  */
 

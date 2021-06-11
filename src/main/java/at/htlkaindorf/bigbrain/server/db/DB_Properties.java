@@ -7,7 +7,11 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
- *
+ * Wrapper class for dealing with
+ * the properties file storing the database
+ * information.
+ * @version BigBrain v1
+ * @since 13.04.2021
  * @author m4ttm00ny
  */
 

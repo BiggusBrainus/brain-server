@@ -17,6 +17,16 @@ import javax.crypto.SecretKey;
 import java.sql.SQLException;
 import java.util.Base64;
 
+/**
+ * Deals with user authentication - it holds 
+ * the current secret used for JWT signing, 
+ * confirms web tokens, gets a user from their
+ * token, etc. 
+ * @version BigBrain v1
+ * @since 12.05.2021
+ * @author m4ttm00ny
+ */
+
 public class Authenticator {
     private static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 

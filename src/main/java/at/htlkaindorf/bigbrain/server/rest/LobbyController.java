@@ -29,6 +29,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The REST Controller for the /lobbies
+ * URL endpoints - like the name suggests,
+ * it deals with lobby & few game actions.
+ * @version BigBrain v1
+ * @since 12.05.2021
+ * @author m4ttm00ny
+ */
+
 @RestController
 @RequestMapping(value = "/lobbies")
 public class LobbyController {

@@ -14,6 +14,8 @@ import java.util.Objects;
 
 /**
  * Represents a registered user of the app.
+ * @version BigBrain v1
+ * @since 07.04.2021
  * @author m4ttm00ny
  */
 

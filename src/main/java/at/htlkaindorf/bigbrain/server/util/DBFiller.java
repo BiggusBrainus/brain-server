@@ -16,6 +16,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A helper class for filling the questions
+ * database with questions from the Open Trivia
+ * Database.
+ * @version BigBrain v1
+ * @since 05.05.2021
+ * @author m4ttm00ny
+ */
+
 public class DBFiller {
 
     private static final String API_URL = "https://opentdb.com/api.php?amount=%d";

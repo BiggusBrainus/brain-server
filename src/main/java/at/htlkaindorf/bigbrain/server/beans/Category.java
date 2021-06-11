@@ -14,6 +14,8 @@ import java.util.Objects;
  * Represents a certain category a card belogns to.
  * E.g.: "What's the name of the highest mountain?" would
  * probably belong into a category like "Geography".
+ * @version BigBrain v1
+ * @since 07.04.2021
  * @author m4ttm00ny
  */
 
