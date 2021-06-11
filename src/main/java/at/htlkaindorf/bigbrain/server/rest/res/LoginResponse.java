@@ -8,18 +8,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponse {
-    private boolean success;
+public class LoginResponse extends RESTResponse {
     private String token;
     private LoginError error;
 
-    public LoginResponse(boolean success, String token) {
-        this.success = success;
+    public LoginResponse(String token) {
+        this.success = true;
         this.token = token;
     }
 
-    public LoginResponse(boolean success, LoginError error) {
-        this.success = success;
+    public LoginResponse(LoginError error) {
+        this.success = false;
         this.error = error;
     }
 }

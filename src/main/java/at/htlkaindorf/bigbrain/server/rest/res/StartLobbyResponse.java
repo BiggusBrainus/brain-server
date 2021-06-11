@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-public class StartLobbyResponse {
-    private boolean success;
+public class StartLobbyResponse extends RESTResponse {
     private StartLobbyError error;
 
     public StartLobbyResponse() {

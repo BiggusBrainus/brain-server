@@ -11,8 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetLobbiesResponse {
-    private boolean success;
+public class GetLobbiesResponse extends RESTResponse {
     private List<Lobby> lobbies;
     private GetLobbiesError error;
 

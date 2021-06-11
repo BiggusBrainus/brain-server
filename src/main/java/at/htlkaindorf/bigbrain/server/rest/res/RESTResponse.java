@@ -8,8 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConfirmResponse extends RESTResponse {
-    public ConfirmResponse(boolean success) {
-        super(success, null);
+public class RESTResponse {
+    protected boolean success;
+    protected RESTError error;
+
+    public RESTResponse(RESTError error) {
+        this.success = false;
+        this.error = error;
     }
 }

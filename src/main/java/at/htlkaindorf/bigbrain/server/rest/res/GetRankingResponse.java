@@ -11,8 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetRankingResponse {
-    private boolean success;
+public class GetRankingResponse extends RESTResponse {
     private List<Rank> ranking;
     private GetRankingResponseError error;
 

@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-public class NewLobbyResponse {
-    private boolean success;
+public class NewLobbyResponse extends RESTResponse {
     private NewLobbyError error;
 
     public NewLobbyResponse() {
@@ -15,6 +13,7 @@ public class NewLobbyResponse {
     }
 
     public NewLobbyResponse(NewLobbyError error) {
+        this.success = false;
         this.error = error;
     }
 }

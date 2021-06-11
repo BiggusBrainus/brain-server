@@ -8,18 +8,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterResponse {
-    private boolean success;
+public class RegisterResponse extends RESTResponse {
     private String token;
     private RegisterError error;
 
-    public RegisterResponse(boolean success, String token) {
-        this.success = success;
+    public RegisterResponse(String token) {
+        this.success = true;
         this.token = token;
     }
 
-    public RegisterResponse(boolean success, RegisterError error) {
-        this.success = success;
+    public RegisterResponse(RegisterError error) {
+        this.success = false;
         this.error = error;
     }
 }

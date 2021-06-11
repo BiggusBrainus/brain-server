@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-public class JoinLobbyResponse {
-    private boolean success;
+public class JoinLobbyResponse extends RESTResponse {
     private JoinLobbyError error;
 
     public JoinLobbyResponse() {

@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-public class LeaveLobbyResponse {
-    private boolean success;
+public class LeaveLobbyResponse extends RESTResponse {
     private LeaveLobbyError error;
 
     public LeaveLobbyResponse() {

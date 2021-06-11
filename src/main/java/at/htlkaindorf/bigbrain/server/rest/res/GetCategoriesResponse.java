@@ -11,8 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetCategoriesResponse {
-    private boolean success;
+public class GetCategoriesResponse extends RESTResponse {
     private List<Category> categories;
     private GetCategoriesError error;
 
