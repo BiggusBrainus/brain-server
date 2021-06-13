@@ -4,6 +4,11 @@
         <br />
         BigBrain
     </h1>
+    <p>
+      <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/BiggusBrainus/brain-server/Java%20CI%20with%20Maven?style=for-the-badge">
+      <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/BiggusBrainus/brain-server?style=for-the-badge">
+      <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/BiggusBrainus/brain-server?style=for-the-badge">
+    </p>
 </div>
 
 ---
