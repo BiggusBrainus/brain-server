@@ -57,12 +57,13 @@ public class Game {
     }
 
     public void endGame() {
-        List<Rank> ranking = scores.keySet().stream().map(u -> new Rank(u, scores.get(u).stream().filter(b -> b).count())).collect(Collectors.toList());
+        List<Rank> ranking = scores.keySet().stream().map(u -> new Rank(u, scores.get(u).stream().filter(b -> b).count())).sorted(Comparator.comparing(Rank::getScore).reversed()).collect(Collectors.toList());
         try {
             UsersAccess acc = UsersAccess.getInstance();
             acc.addGame(ranking.get(0).getUser());
         } catch (SQLException|ClassNotFoundException e) {
         } finally {
+            lobby.setGame(null);
             lobby.broadcast(new EndOfGameResponse(ranking));
         }
     }
