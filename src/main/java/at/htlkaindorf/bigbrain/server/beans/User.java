@@ -51,14 +51,33 @@ public class User {
         this.password = hashPassword(plainPassword);
     }
 
-    public String hashPassword(String password) {
-        return new BCryptPasswordEncoder().encode(password);
-    }
-
+    /**
+     * Checks whether or not the given password is actually
+     * the user's password.
+     * @param password  The password to compare the user's password to.
+     * @return Whether or not the given password is the correct password.
+     */
     public boolean checkPassword(String password) {
         return BCrypt.checkpw(password, this.password);
     }
 
+    /**
+     * Hashes and returns the given password using the bcrypt algorithm.
+     * @link https://en.wikipedia.org/wiki/Bcrypt
+     * @param password  The password string to be hashed.
+     * @return The bcrypt hash of the given password string.
+     */
+    public static String hashPassword(String password) {
+        return new BCryptPasswordEncoder().encode(password);
+    }
+
+    /**
+     * Construct a new User object from the ResultSet returned
+     * from a Postgres query.
+     * @param rs    The ResultSet object.
+     * @return A User object containing the ResultSet's info.
+     * @throws SQLException     The ResultSet seems to be missing columns.
+     */
     public static User fromResultSet(ResultSet rs) throws SQLException {
         return new User(rs.getInt("uid"), rs.getString("username"), rs.getString("email"), rs.getString("password").getBytes(StandardCharsets.UTF_8));
     }

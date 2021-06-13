@@ -60,6 +60,10 @@ public class QuestionsAccess extends DB_Access {
         connect();
     }
 
+    /**
+     * Load the connection details and credentials using
+     * the DB_Properties wrapper.
+     */
     private void loadProperties() {
         this.db_url = DB_Properties.getPropertyValue("questions_url");
         this.db_driver = DB_Properties.getPropertyValue("driver");
@@ -67,6 +71,12 @@ public class QuestionsAccess extends DB_Access {
         this.db_pass = DB_Properties.getPropertyValue("questions_password");
     }
 
+    /**
+     * Get a list of all existing categories from the
+     * questions database.
+     * @return A list of all categories.
+     * @throws SQLException     Executing the SQL query failed.
+     */
     public List<Category> getAllCategories() throws SQLException {
         Statement stat = db.getStatement();
         ResultSet rs = stat.executeQuery("SELECT * FROM categories");
@@ -75,6 +85,13 @@ public class QuestionsAccess extends DB_Access {
         return categories;
     }
 
+    /**
+     * Get a Category object by its category ID.
+     * @param cid   The category ID.
+     * @return The Category object identified by the category ID.
+     * @throws SQLException                 The SQL query failed.
+     * @throws UnknownCategoryException     No category has the given category ID.
+     */
     public Category getCategoryById(int cid) throws SQLException, UnknownCategoryException {
         if (getCategoryByIdStat == null) {
             getCategoryByIdStat = db.getConnection().prepareStatement(GET_CATEGORY_BY_ID_QRY);
@@ -85,6 +102,12 @@ public class QuestionsAccess extends DB_Access {
         return Category.fromResultSet(rs);
     }
 
+    /**
+     * Get a list of Category objects identified by the
+     * given list of category IDs.
+     * @param cids  The list of category IDs.
+     * @return The list of Category objects.
+     */
     public List<Category> getCategoriesById(List<Integer> cids) {
         List<Category> res = new ArrayList<>();
         for (int cid: cids) {
@@ -96,6 +119,13 @@ public class QuestionsAccess extends DB_Access {
         return res;
     }
 
+    /**
+     * Get a list of Category objects identified by the
+     * given title.
+     * @param title     The title to search for.
+     * @return The list of Category objects.
+     * @throws SQLException     The SQL query failed.
+     */
     public List<Category> getCategoriesByTitle(String title) throws SQLException {
         if (getCategoriesByTitleStat == null) {
             getCategoriesByTitleStat = db.getConnection().prepareStatement(GET_CATEGORIES_BY_TITLE_QRY);
@@ -107,6 +137,14 @@ public class QuestionsAccess extends DB_Access {
         return categories;
     }
 
+    /**
+     * Get a list of Category objects identified by the
+     * given title and language.
+     * @param title     The title to search for.
+     * @param lang      The language to search for.
+     * @return The list of Category objects.
+     * @throws SQLException     The SQL query failed.
+     */
     public List<Category> getCategoriesByTitleLanguage(String title, String lang) throws SQLException {
         if (getCategoriesByTitleLangStat == null) {
             getCategoriesByTitleLangStat = db.getConnection().prepareStatement(GET_CATEGORIES_BY_TITLE_LANG_QRY);
@@ -119,6 +157,13 @@ public class QuestionsAccess extends DB_Access {
         return categories;
     }
 
+    /**
+     * Get a list of Category objects identified by the
+     * given language.
+     * @param lang      The language to search for.
+     * @return The list of Category objects.
+     * @throws SQLException     The SQL query failed.
+     */
     public List<Category> getCategoriesByLanguage(String lang) throws SQLException {
         if (getCategoriesByLangStat == null) {
             getCategoriesByLangStat = db.getConnection().prepareStatement(GET_CATEGORIES_BY_LANG_QRY);
@@ -130,6 +175,11 @@ public class QuestionsAccess extends DB_Access {
         return categories;
     }
 
+    /**
+     * Store a new category in the Postgres database.
+     * @param c     The Category object to be stored.
+     * @throws SQLException     The SQL query failed.
+     */
     public void insertCategory(Category c) throws SQLException {
         if (insertCategoryStat == null) {
             insertCategoryStat = db.getConnection().prepareStatement(INSERT_CATEGORY_QRY);
@@ -139,6 +189,14 @@ public class QuestionsAccess extends DB_Access {
         insertCategoryStat.executeUpdate();
     }
 
+    /**
+     * Get a list of Question objects with the
+     * given question.
+     * @param question  The question to search for.
+     * @return The list of Question objects.
+     * @throws SQLException             The SQL query failed.
+     * @throws UnknownCategoryException One of the Question objects falls into a non-existent category.
+     */
     public List<Question> getQuestionsByQuestion(String question) throws SQLException, UnknownCategoryException {
         if (getQuestionsByQuestionStat == null) {
             getQuestionsByQuestionStat = db.getConnection().prepareStatement(GET_QUESTIONS_BY_QUESTION_QRY);
@@ -150,6 +208,14 @@ public class QuestionsAccess extends DB_Access {
         return questions;
     }
 
+    /**
+     * Get a list of Question objects with the
+     * given question and category.
+     * @param question  The question to search for.
+     * @param c         The Category object to search for.
+     * @return The list of Question objects.
+     * @throws SQLException     The SQL query failed.
+     */
     public List<Question> getQuestionsByQuestionCategory(String question, Category c) throws SQLException {
         if (getQuestionsByQuestionCategoryStat == null) {
             getQuestionsByQuestionCategoryStat = db.getConnection().prepareStatement(GET_QUESTIONS_BY_QUESTION_CATEGORY_QRY);
@@ -162,6 +228,13 @@ public class QuestionsAccess extends DB_Access {
         return questions;
     }
 
+    /**
+     * Get a list of all questions in a given category ID.
+     * @param cid   The category ID to search for.
+     * @return The list of Question objects.
+     * @throws SQLException             The SQL query failed.
+     * @throws UnknownCategoryException No category has the given category ID.
+     */
     public List<Question> getQuestionsFromCategory(int cid) throws SQLException, UnknownCategoryException {
         if (getQuestionsFromCategoryStat == null) {
             getQuestionsFromCategoryStat = db.getConnection().prepareStatement(GET_QUESTIONS_FROM_CATEGORY_QRY);
@@ -174,6 +247,14 @@ public class QuestionsAccess extends DB_Access {
         return questions;
     }
 
+    /**
+     * Gets a list of random questions from the
+     * questions database.
+     * @param amount    The number of questions to get.
+     * @return The list of Question objects.
+     * @throws SQLException             The SQL query failed.
+     * @throws UnknownCategoryException One of the Question objects falls into a non-existent category.
+     */
     public List<Question> getRandomQuestions(int amount) throws SQLException, UnknownCategoryException {
         if (getRandomQuestionsStat == null) {
             getRandomCategoryQuestionsStat = db.getConnection().prepareStatement(GET_RANDOM_QUESTIONS_QRY);
@@ -185,6 +266,15 @@ public class QuestionsAccess extends DB_Access {
         return questions;
     }
 
+    /**
+     * Get a list of random questions with the
+     * given category ID from the questions database.
+     * @param amount    The number of questions to get.
+     * @param cid       The category ID of the questions to get.
+     * @return The list of Question objects.
+     * @throws UnknownCategoryException One of the Question objects falls into a non-existent category.
+     * @throws SQLException             The SQL query failed.
+     */
     public List<Question> getRandomQuestionsFromCategory(int amount, int cid) throws UnknownCategoryException, SQLException {
         if (getRandomCategoryQuestionsStat == null) {
             getRandomCategoryQuestionsStat = db.getConnection().prepareStatement(GET_RANDOM_CATEGORY_QUESTIONS_QRY);
@@ -198,6 +288,15 @@ public class QuestionsAccess extends DB_Access {
         return questions;
     }
 
+    /**
+     * Get a list of random questions with any
+     * category in the given list of category IDs.
+     * @param amount    The number of questions to get.
+     * @param cids      The category IDs of the questions to get.
+     * @return The list of Question objects.
+     * @throws UnknownCategoryException One of the Question objects falls into a non-existent category.
+     * @throws SQLException             The SQL query failed.
+     */
     public List<Question> getRandomQuestionsFromCategories(int amount, List<Integer> cids) throws UnknownCategoryException, SQLException {
         if (cids.size() == 1) {
             return getRandomQuestionsFromCategory(amount, cids.get(0));
@@ -209,6 +308,11 @@ public class QuestionsAccess extends DB_Access {
         return ret;
     }
 
+    /**
+     * Store a new question in the Postgres database.
+     * @param question  The Question object to be stored.
+     * @throws SQLException     The SQL query failed.
+     */
     public void insertQuestion(Question question) throws SQLException {
         if (insertQuestionStat == null) {
             insertQuestionStat = db.getConnection().prepareStatement(INSERT_QUESTION_QRY);

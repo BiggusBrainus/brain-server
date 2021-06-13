@@ -35,6 +35,14 @@ public class Question {
         this.wrong = wrong;
     }
 
+    /**
+     * Construct a new Question object from the ResultSet returned
+     * from a Postgres query.
+     * @param rs    The ResultSet object.
+     * @param c     The Category the question falls into.
+     * @return A Question object containing the ResultSet's info.
+     * @throws SQLException     The ResultSet seems to be missing columns.
+     */
     public static Question fromResultSet(ResultSet rs, Category c) throws SQLException {
         List<String> wrong = new ArrayList<>();
         wrong.add(rs.getString("wrong1"));

@@ -48,6 +48,10 @@ public class UsersAccess extends DB_Access {
         connect();
     }
 
+    /**
+     * Load the connection details and credentials using
+     * the DB_Properties wrapper.
+     */
     private void loadProperties() {
         this.db_url = DB_Properties.getPropertyValue("users_url");
         this.db_driver = DB_Properties.getPropertyValue("driver");
@@ -55,6 +59,11 @@ public class UsersAccess extends DB_Access {
         this.db_pass = DB_Properties.getPropertyValue("users_password");
     }
 
+    /**
+     * Get a list of all users from the users database.
+     * @return The list of User objects.
+     * @throws SQLException     The SQL query failed.
+     */
     public List<User> getAllUsers() throws SQLException {
         Statement stat = db.getStatement();
         ResultSet rs = stat.executeQuery("SELECT * FROM users");
@@ -63,6 +72,14 @@ public class UsersAccess extends DB_Access {
         return users;
     }
 
+    /**
+     * Get the user with the given user ID from the
+     * users database.
+     * @param uid   The user's user ID.
+     * @return The User object identified by the given ID.
+     * @throws SQLException         The SQL query failed.
+     * @throws UnknownUserException No user has the given user ID.
+     */
     public User getUserByUid(int uid) throws SQLException, UnknownUserException {
         if (getUserByUidStat == null) {
             getUserByUidStat = db.getConnection().prepareStatement(GET_USER_BY_UID_QRY);
@@ -73,6 +90,14 @@ public class UsersAccess extends DB_Access {
         return User.fromResultSet(rs);
     }
 
+    /**
+     * Get the user with the given username from
+     * the users database.
+     * @param username  The user's username.
+     * @return The User object identified by the given ID.
+     * @throws SQLException         The SQL query failed.
+     * @throws UnknownUserException No user has the given username.
+     */
     public User getUserByName(String username) throws SQLException, UnknownUserException {
         if (getUserByNameStat == null) {
             getUserByNameStat = db.getConnection().prepareStatement(GET_USER_BY_NAME_QRY);
@@ -83,6 +108,11 @@ public class UsersAccess extends DB_Access {
         return User.fromResultSet(rs);
     }
 
+    /**
+     * Store a new user in the Postgres database.
+     * @param user  The User object to be stored.
+     * @throws SQLException     The SQL query failed.
+     */
     public void createUser(User user) throws SQLException {
         if (insertUserStat == null) {
             insertUserStat = db.getConnection().prepareStatement(INSERT_USER_QRY);
@@ -93,6 +123,12 @@ public class UsersAccess extends DB_Access {
         insertUserStat.executeUpdate();
     }
 
+    /**
+     * Store the result of a game in the Postgres
+     * database.
+     * @param winner    The user that won the game.
+     * @throws SQLException     The SQL query failed.
+     */
     public void addGame(User winner) throws SQLException {
         if (insertGameStat == null) {
             insertGameStat = db.getConnection().prepareStatement(INSERT_GAME_QRY);
@@ -101,6 +137,13 @@ public class UsersAccess extends DB_Access {
         insertGameStat.executeUpdate();
     }
 
+    /**
+     * Get the top players (in terms of victories)
+     * from the Postgres database.
+     * @param n     The number of top players to get.
+     * @return A list of the top n players.
+     * @throws SQLException     The SQL query failed.
+     */
     public List<Rank> getTopN(int n) throws SQLException {
         if (getRankingStat == null) {
             getRankingStat = db.getConnection().prepareStatement(GET_RANKING_QRY);

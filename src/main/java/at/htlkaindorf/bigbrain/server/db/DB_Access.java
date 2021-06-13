@@ -17,6 +17,11 @@ public class DB_Access {
     protected String db_user;
     protected String db_pass;
 
+    /**
+     * Connect to the database.
+     * @throws SQLException             Establishing a connection failed.
+     * @throws ClassNotFoundException   The Postgres driver class couldn't be loaded.
+     */
     public void connect() throws SQLException, ClassNotFoundException {
         if (db != null) {
             db.disconnect();
@@ -25,6 +30,10 @@ public class DB_Access {
         db.connect();
     }
 
+    /**
+     * Disconnect from the database.
+     * @throws SQLException     Disconnecting from the database failed.
+     */
     public void disconnect() throws SQLException {
         if (db == null) {
             return;
@@ -33,6 +42,11 @@ public class DB_Access {
         db = null;
     }
 
+    /**
+     * Checks, whether or not a connection to the
+     * database has been established.
+     * @return Whether or not a connection hsa been established.
+     */
     public boolean isConnected() {
         return db != null && db.isConnected();
     }

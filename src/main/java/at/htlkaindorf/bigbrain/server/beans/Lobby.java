@@ -47,10 +47,20 @@ public class Lobby {
         this.hidden = hidden;
     }
 
+    /**
+     * Indicates, whether or not the lobby is already
+     * playing a game.
+     * @return Whether or not the lobby is currently in-game.
+     */
     public boolean isInGame() {
         return game != null;
     }
 
+    /**
+     * Broadcasts a WebSocketResponse via all the
+     * joined user's WebSocket sessions.
+     * @param res   The WebSocketResponse that should be broadcast.
+     */
     public void broadcast(WebSocketResponse res) {
         List<User> disconnect = new ArrayList<>();
         getConnections().forEach((u, s) -> {

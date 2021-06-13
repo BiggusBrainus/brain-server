@@ -40,6 +40,13 @@ public class Category {
         this.lang = lang;
     }
 
+    /**
+     * Construct a new Category object from the ResultSet returned
+     * from a Postgres query.
+     * @param rs    The ResultSet object.
+     * @return A Category object containing the ResultSet's info.
+     * @throws SQLException     The ResultSet seems to be missing columns.
+     */
     public static Category fromResultSet(ResultSet rs) throws SQLException {
         return new Category(rs.getInt("cid"), rs.getString("title"), rs.getString("lang"));
     }
