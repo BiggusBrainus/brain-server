@@ -36,11 +36,22 @@ public class Game {
         lobby.getPlayers().forEach(p -> scores.put(p, new ArrayList<>(Arrays.asList(new Boolean[5]))));
     }
 
+    /**
+     * Starts the game; broadcasts the first question to
+     * all connected clients.
+     */
     public void startGame() {
         lobby.broadcast(new NextQuestionResponse(questions.get(0)));
     }
 
-    public void submitAnswer(User player, int question, String answer) throws IOException {
+    /**
+     * Submit the answer a player gave for a certain
+     * round of questions.
+     * @param player        The player who gave the answer.
+     * @param question      The round of questions the answer belongs to.
+     * @param answer        The answer the player gave.
+     */
+    public void submitAnswer(User player, int question, String answer) {
         // has already submitted answer, just ignore ...
         if (scores.get(player).get(question) != null) return;
         scores.get(player).set(question, questions.get(question).getCorrect().equals(answer));
@@ -56,15 +67,23 @@ public class Game {
         }
     }
 
+    /**
+     * Ends the game. Evaluates each player's end score and
+     * ranks them based on it. Broadcasts the final ranking
+     * and stores the winner in the database (if more than
+     * one player participated in the game).
+     */
     public void endGame() {
         List<Rank> ranking = scores.keySet().stream().map(u -> new Rank(u, scores.get(u).stream().filter(b -> b).count())).sorted(Comparator.comparing(Rank::getScore).reversed()).collect(Collectors.toList());
-        try {
-            UsersAccess acc = UsersAccess.getInstance();
-            acc.addGame(ranking.get(0).getUser());
-        } catch (SQLException|ClassNotFoundException e) {
-        } finally {
-            lobby.setGame(null);
-            lobby.broadcast(new EndOfGameResponse(ranking));
+        // don't rate games with only one player ...
+        if (ranking.size() > 1) {
+            try {
+                UsersAccess acc = UsersAccess.getInstance();
+                acc.addGame(ranking.get(0).getUser());
+            } catch (SQLException|ClassNotFoundException e) {
+            }
         }
+        lobby.setGame(null);
+        lobby.broadcast(new EndOfGameResponse(ranking));
     }
 }

@@ -6,14 +6,13 @@ import at.htlkaindorf.bigbrain.server.beans.Lobby;
 import at.htlkaindorf.bigbrain.server.beans.User;
 import at.htlkaindorf.bigbrain.server.db.access.QuestionsAccess;
 import at.htlkaindorf.bigbrain.server.errors.*;
-import at.htlkaindorf.bigbrain.server.game.GameManager;
+import at.htlkaindorf.bigbrain.server.game.LobbyManager;
 import at.htlkaindorf.bigbrain.server.rest.req.JoinLobbyRequest;
 import at.htlkaindorf.bigbrain.server.rest.req.LeaveLobbyRequest;
 import at.htlkaindorf.bigbrain.server.rest.req.NewLobbyRequest;
 import at.htlkaindorf.bigbrain.server.rest.req.StartLobbyRequest;
 import at.htlkaindorf.bigbrain.server.rest.res.*;
 import at.htlkaindorf.bigbrain.server.rest.res.errors.*;
-import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +49,7 @@ public class LobbyController {
         try {
             User user = Authenticator.getUser(req.getToken());
             QuestionsAccess acc = QuestionsAccess.getInstance();
-            GameManager.newLobby(req.getLobby().getName(), user, acc.getCategoriesById(req.getCategories()), req.getLobby().isHidden());
+            LobbyManager.newLobby(req.getLobby().getName(), user, acc.getCategoriesById(req.getCategories()), req.getLobby().isHidden());
             return new ResponseEntity<>(new NewLobbyResponse(), HttpStatus.OK);
         } catch (UnknownUserException|InvalidSignatureError e) {
             return new ResponseEntity<>(new NewLobbyResponse(NewLobbyError.AUTH_FAILURE), HttpStatus.OK);
@@ -73,7 +72,7 @@ public class LobbyController {
                 return new ResponseEntity<>(new GetLobbiesResponse(GetLobbiesError.OTHER_ERROR), HttpStatus.OK);
             }
         }
-        List<Lobby> lobbies = GameManager.getLobbiesByCategories(categories);
+        List<Lobby> lobbies = LobbyManager.getLobbiesByCategories(categories);
         return new ResponseEntity<>(new GetLobbiesResponse(lobbies), HttpStatus.OK);
     }
 
@@ -89,12 +88,12 @@ public class LobbyController {
 
     @PostMapping(value = "/join", consumes = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<JoinLobbyResponse> join(@RequestBody JoinLobbyRequest req) {
-        if (req.getLobby() == null || !GameManager.isLobby(req.getLobby())) {
+        if (req.getLobby() == null || !LobbyManager.isLobby(req.getLobby())) {
             return new ResponseEntity<>(new JoinLobbyResponse(JoinLobbyError.MISSING_LOBBY), HttpStatus.OK);
         }
         try {
             User user = Authenticator.getUser(req.getToken());
-            GameManager.joinLobby(user, GameManager.getLobby(req.getLobby()));
+            LobbyManager.joinLobby(user, LobbyManager.getLobby(req.getLobby()));
             return new ResponseEntity<>(new JoinLobbyResponse(), HttpStatus.OK);
         } catch (SQLException|ClassNotFoundException e) {
             return new ResponseEntity<>(new JoinLobbyResponse(JoinLobbyError.OTHER_ERROR), HttpStatus.OK);
@@ -110,7 +109,7 @@ public class LobbyController {
         try {
             User user = Authenticator.getUser(req.getToken());
             if (user.getLobby() != null) {
-                GameManager.startLobby(user.getLobby());
+                LobbyManager.startLobby(user.getLobby());
                 return new ResponseEntity<>(new StartLobbyResponse(), HttpStatus.OK);
             }
             return new ResponseEntity<>(new StartLobbyResponse(StartLobbyError.NOT_PART_OF_LOBBY), HttpStatus.OK);
@@ -125,7 +124,7 @@ public class LobbyController {
     public ResponseEntity<LeaveLobbyResponse> leave(@RequestBody LeaveLobbyRequest req) {
         try {
             User user = Authenticator.getUser(req.getToken());
-            GameManager.leaveLobby(user);
+            LobbyManager.leaveLobby(user);
             return new ResponseEntity<>(new LeaveLobbyResponse(), HttpStatus.OK);
         } catch (SQLException|ClassNotFoundException e) {
             return new ResponseEntity<>(new LeaveLobbyResponse(LeaveLobbyError.OTHER_ERROR), HttpStatus.OK);

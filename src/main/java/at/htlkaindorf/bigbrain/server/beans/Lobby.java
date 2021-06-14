@@ -1,10 +1,8 @@
 package at.htlkaindorf.bigbrain.server.beans;
 
 import at.htlkaindorf.bigbrain.server.game.Game;
-import at.htlkaindorf.bigbrain.server.game.GameManager;
+import at.htlkaindorf.bigbrain.server.game.LobbyManager;
 import at.htlkaindorf.bigbrain.server.websockets.LobbyGameHandler;
-import at.htlkaindorf.bigbrain.server.websockets.LobbyGameHandlerActions;
-import at.htlkaindorf.bigbrain.server.websockets.res.LobbyPlayersUpdateResponse;
 import at.htlkaindorf.bigbrain.server.websockets.res.WebSocketResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -71,6 +69,6 @@ public class Lobby {
                 disconnect.add(u);
             }
         });
-        disconnect.forEach(u -> GameManager.leaveLobby(u));
+        disconnect.forEach(u -> LobbyManager.leaveLobby(u));
     }
 }

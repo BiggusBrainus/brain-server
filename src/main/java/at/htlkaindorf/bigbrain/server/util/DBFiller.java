@@ -31,10 +31,25 @@ public class DBFiller {
     private static final JsonMapper mapper = new JsonMapper();
     private static QuestionsAccess access;
 
+    /**
+     * Get a certain amount of questions from the
+     * Open Trivia DB service.
+     * @param amount    The amount of questions to get.
+     * @return A Reply object containing both the API's response code and the list of questions.
+     * @throws IOException      Something went wrong with the HTTP request/response.
+     */
     private static Reply getQuestions(int amount) throws IOException {
         return mapper.readValue(new URL(String.format(API_URL, amount)), Reply.class);
     }
 
+    /**
+     * Parses a TDBQuestion object into a regular
+     * Question object and immediately stores it
+     * in the questions database as well.
+     * @param question  The TDBQuestion to convert.
+     * @return A Question object with the information of the given TDBQuestion object.
+     * @throws SQLException     The question could not be added to the database.
+     */
     private static Question tdbToQuestion(TDBQuestion question) throws SQLException {
         List<Category> categories = access.getCategoriesByTitleLanguage(question.getCategory(), "en");
         Category c;

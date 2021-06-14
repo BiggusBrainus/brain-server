@@ -5,7 +5,7 @@ import at.htlkaindorf.bigbrain.server.db.access.UsersAccess;
 import at.htlkaindorf.bigbrain.server.errors.AuthError;
 import at.htlkaindorf.bigbrain.server.errors.InvalidSignatureError;
 import at.htlkaindorf.bigbrain.server.errors.UnknownUserException;
-import at.htlkaindorf.bigbrain.server.game.GameManager;
+import at.htlkaindorf.bigbrain.server.game.LobbyManager;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -15,7 +15,6 @@ import io.jsonwebtoken.security.SignatureException;
 
 import javax.crypto.SecretKey;
 import java.sql.SQLException;
-import java.util.Base64;
 
 /**
  * Deals with user authentication - it holds 
@@ -93,7 +92,7 @@ public class Authenticator {
         }
         UsersAccess acc = UsersAccess.getInstance();
         User u = acc.getUserByName(jws.getBody().getSubject());;
-        GameManager.makePlayer(u);
+        LobbyManager.makePlayer(u);
         return u;
     }
 }

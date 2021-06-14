@@ -5,7 +5,7 @@ import at.htlkaindorf.bigbrain.server.beans.User;
 import at.htlkaindorf.bigbrain.server.errors.InvalidSignatureError;
 import at.htlkaindorf.bigbrain.server.errors.NotJoinedError;
 import at.htlkaindorf.bigbrain.server.errors.UnknownUserException;
-import at.htlkaindorf.bigbrain.server.game.GameManager;
+import at.htlkaindorf.bigbrain.server.game.LobbyManager;
 import at.htlkaindorf.bigbrain.server.websockets.req.AnswerRequest;
 import at.htlkaindorf.bigbrain.server.websockets.req.ConnectToLobbyRequest;
 import at.htlkaindorf.bigbrain.server.websockets.req.WebSocketRequest;
@@ -64,7 +64,7 @@ public class LobbyGameHandler extends TextWebSocketHandler {
         // System.out.printf("[*] NEW CONNECTION TO LOBBY USING TOKEN %s!\n", req.getToken());
         try {
             User user = Authenticator.getUser(req.getToken());
-            GameManager.connectToLobby(user, session);
+            LobbyManager.connectToLobby(user, session);
         } catch (SQLException|ClassNotFoundException e) {
             sendMessage(session, new ConnectToLobbyResponse(ConnectToLobbyError.OTHER_ERROR));
         } catch (UnknownUserException|InvalidSignatureError e) {
