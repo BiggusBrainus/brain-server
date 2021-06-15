@@ -155,9 +155,12 @@ public class LobbyManager {
      * @throws ClassNotFoundException       The Postgres driver class couldn't be loaded.
      */
     public static void startLobby(Lobby lobby) throws UnknownCategoryException, SQLException, ClassNotFoundException {
-        lobby.setGame(new Game(lobby));
-        lobby.broadcast(new StartLobbyResponse());
-        lobby.getGame().startGame();
+        // Don't start the lobby, if it's already in game ...
+        if (!lobby.isInGame()) {
+            lobby.setGame(new Game(lobby));
+            lobby.broadcast(new StartLobbyResponse());
+            lobby.getGame().startGame();
+        }
     }
 
     /**

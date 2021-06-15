@@ -76,7 +76,8 @@ public class Game {
     public void endGame() {
         List<Rank> ranking = scores.keySet().stream().map(u -> new Rank(u, scores.get(u).stream().filter(b -> b).count())).sorted(Comparator.comparing(Rank::getScore).reversed()).collect(Collectors.toList());
         // don't rate games with only one player ...
-        if (ranking.size() > 1) {
+        // don't rate games that end in a draw / with two winners ...
+        if (ranking.size() > 1 && ranking.get(0).getScore() != ranking.get(1).getScore()) {
             try {
                 UsersAccess acc = UsersAccess.getInstance();
                 acc.addGame(ranking.get(0).getUser());
