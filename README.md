@@ -35,3 +35,7 @@ If, for some reason, you wanted to change the port the server is running on - e.
 server:
   port: 8090
 ```
+
+## Endpoints
+
+In case you want to develop your own *BigBrain* client or you just want to see, what the HTTP endpoints are like, you can check out the API documentation exported from Postman @ [documenter.getpostman.com](https://documenter.getpostman.com/view/10746759/TzeUo8qT).
