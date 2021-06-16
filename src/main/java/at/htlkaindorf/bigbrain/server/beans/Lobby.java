@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
@@ -30,12 +31,14 @@ import java.util.Map;
 @AllArgsConstructor
 public class Lobby {
     private String name;
+    @ToStringExclude
     private List<User> players;
     private List<Category> categories;
     private boolean hidden;
     @JsonIgnore
     private Game game;
     @JsonIgnore
+    @ToStringExclude
     private Map<User, WebSocketSession> connections = new HashMap<>();
 
     public Lobby(String name, List<User> players, List<Category> categories, boolean hidden) {

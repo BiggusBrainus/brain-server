@@ -39,6 +39,7 @@ public class LobbyGameHandler extends TextWebSocketHandler {
         try {
             super.handleTextMessage(session, message);
             String msg = String.valueOf(message.getPayload());
+            // System.out.printf("[DEBUG]: Websocket: %s\n", msg);
             WebSocketRequest req = mapper.readValue(msg, WebSocketRequest.class);
             switch (req.getAction()) {
                 case CONNECT_TO_LOBBY:

@@ -41,6 +41,7 @@ public class AuthController {
 
     @PostMapping(value = "/login", consumes = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest req) {
+        System.out.printf("[INFO]: New Login for %s\n", req.getUsername());
         try {
             try {
                 return new ResponseEntity<>(new LoginResponse(Authenticator.login(req.getUsername(), req.getPassword())), HttpStatus.OK);
@@ -55,6 +56,7 @@ public class AuthController {
 
     @PostMapping(value = "/register", consumes = { MediaType.APPLICATION_JSON_VALUE } )
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest req) {
+        System.out.printf("[INFO]: New User %s registered\n", req.getUsername());
         try {
             UsersAccess acc = UsersAccess.getInstance();
             try {

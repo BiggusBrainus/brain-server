@@ -106,6 +106,7 @@ public class LobbyManager {
      * @throws LobbyExistsError     Thrown, if a lobby with the given name already exists.
      */
     public static void newLobby(String name, User user, List<Category> categories, boolean hidden) throws LobbyExistsError {
+        // System.out.printf("[DEBUG]: New Lobby for %s named %s!\n", user.getUsername(), name);
         if (isLobby(name)) {
             throw new LobbyExistsError("This lobby name is already taken!");
         }
@@ -155,6 +156,7 @@ public class LobbyManager {
      * @throws ClassNotFoundException       The Postgres driver class couldn't be loaded.
      */
     public static void startLobby(Lobby lobby) throws UnknownCategoryException, SQLException, ClassNotFoundException {
+        // System.out.printf("[DEBUG]: %s is getting it started ... \n", lobby.getName());
         // Don't start the lobby, if it's already in game ...
         if (!lobby.isInGame()) {
             lobby.setGame(new Game(lobby));

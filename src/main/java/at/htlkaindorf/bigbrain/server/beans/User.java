@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -29,6 +30,7 @@ public class User {
     @JsonIgnore
     private String password;
     @JsonIgnore
+    @ToStringExclude
     private Lobby lobby;
 
     public User(int uid, String username, String email, String plainPassword) {

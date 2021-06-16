@@ -43,6 +43,7 @@ public class LobbyController {
 
     @PostMapping(value = "/create", consumes = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<NewLobbyResponse> create(@RequestBody NewLobbyRequest req) {
+        System.out.printf("[INFO]: New Lobby %s created\n", req.getLobby().getName());
         if (req.getCategories() == null || req.getLobby() == null || req.getLobby().getName() == null || req.getLobby().getName().trim().equals("")) {
             return new ResponseEntity<>(new NewLobbyResponse(NewLobbyError.MISSING_LOBBY_NAME), HttpStatus.BAD_REQUEST);
         }
@@ -93,6 +94,7 @@ public class LobbyController {
         }
         try {
             User user = Authenticator.getUser(req.getToken());
+            System.out.printf("[INFO]: %s joined lobby %s\n", user.getUsername(), req.getLobby());
             LobbyManager.joinLobby(user, LobbyManager.getLobby(req.getLobby()));
             return new ResponseEntity<>(new JoinLobbyResponse(), HttpStatus.OK);
         } catch (SQLException|ClassNotFoundException e) {
@@ -108,6 +110,7 @@ public class LobbyController {
     public ResponseEntity<StartLobbyResponse> start(@RequestBody StartLobbyRequest req) {
         try {
             User user = Authenticator.getUser(req.getToken());
+            System.out.printf("[INFO]: %s started a game!\n", user.getUsername());
             if (user.getLobby() != null) {
                 LobbyManager.startLobby(user.getLobby());
                 return new ResponseEntity<>(new StartLobbyResponse(), HttpStatus.OK);
@@ -124,6 +127,7 @@ public class LobbyController {
     public ResponseEntity<LeaveLobbyResponse> leave(@RequestBody LeaveLobbyRequest req) {
         try {
             User user = Authenticator.getUser(req.getToken());
+            System.out.printf("[INFO]: %s left lobby\n", user.getUsername());
             LobbyManager.leaveLobby(user);
             return new ResponseEntity<>(new LeaveLobbyResponse(), HttpStatus.OK);
         } catch (SQLException|ClassNotFoundException e) {
