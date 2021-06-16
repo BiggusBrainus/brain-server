@@ -15,7 +15,7 @@
 
 ## Setup
 
-For the server to work, the `db_access.properties` file from the [Trello board](https://trello.com/b/Ea9Urrpt/4dbigbrain) needs to be put into the `src/main/java/[...]/res/` directory.
+For the server to work, the `db_access.properties` file from the [Trello board](https://trello.com/c/11hcpalx/38-%F0%9F%93%88-datenbank-zugangsdaten) needs to be put into the `src/main/java/[...]/res/` directory.
 
 Apart from that, no special setup is required, since *both* databases are hosted using [ElephantSQL](https://www.elephantsql.com/) and therefore don't run on the same machine as the *BigBrain* server.
 
