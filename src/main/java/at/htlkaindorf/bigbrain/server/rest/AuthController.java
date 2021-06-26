@@ -44,7 +44,8 @@ public class AuthController {
         System.out.printf("[INFO]: New Login for %s\n", req.getUsername());
         try {
             try {
-                return new ResponseEntity<>(new LoginResponse(Authenticator.login(req.getUsername(), req.getPassword())), HttpStatus.OK);
+                UsersAccess acc = UsersAccess.getInstance();
+                return new ResponseEntity<>(new LoginResponse(acc.getUserByName(req.getUsername()).getUid(), Authenticator.login(req.getUsername(), req.getPassword())), HttpStatus.OK);
             } catch (UnknownUserException|AuthError e) {
                 return new ResponseEntity<>(new LoginResponse(LoginError.UNKNOWN_CREDS), HttpStatus.OK);
             }

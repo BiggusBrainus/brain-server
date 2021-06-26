@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponse extends RESTResponse {
+    private int uid;
     private String token;
     private LoginError error;
 
-    public LoginResponse(String token) {
+    public LoginResponse(int uid, String token) {
+        this.uid = uid;
         this.success = true;
         this.token = token;
     }
