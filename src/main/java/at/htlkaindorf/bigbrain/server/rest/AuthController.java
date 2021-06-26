@@ -64,8 +64,13 @@ public class AuthController {
                 acc.getUserByName(req.getUsername());
                 return new ResponseEntity<>(new RegisterResponse(RegisterError.USERNAME_TAKEN), HttpStatus.OK);
             } catch (UnknownUserException e) {
-                acc.createUser(new User(req.getUsername(), req.getEmail(), req.getPassword()));
-                return new ResponseEntity<>(new RegisterResponse(Authenticator.getAuthToken(req.getUsername())), HttpStatus.OK);
+                try {
+                    acc.getUserByEmail(req.getEmail());
+                    return new ResponseEntity<>(new RegisterResponse(RegisterError.EMAIL_TAKEN), HttpStatus.OK);
+                } catch (UnknownUserException e2) {
+                    acc.createUser(new User(req.getUsername(), req.getEmail(), req.getPassword()));
+                    return new ResponseEntity<>(new RegisterResponse(Authenticator.getAuthToken(req.getUsername())), HttpStatus.OK);
+                }
             }
         } catch (SQLException|ClassNotFoundException e) {
             return new ResponseEntity<>(new RegisterResponse(RegisterError.OTHER_ERROR), HttpStatus.OK);

@@ -25,16 +25,18 @@ public class UsersAccess extends DB_Access {
     private static UsersAccess theInstance = null;
 
     private final String GET_USER_BY_UID_QRY    = "SELECT uid, username, email, password FROM users WHERE uid = ?";
+    private final String GET_USER_BY_EMAIL_QRY  = "SELECT Uid, username, email, password FROM users WHERE email = ?";
     private final String GET_USER_BY_NAME_QRY   = "SELECT uid, username, email, password FROM users WHERE username = ?";
     private final String INSERT_USER_QRY        = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
     private final String GET_RANKING_QRY        = "SELECT uid, username, email, password, COUNT(winner) \"wins\" FROM users u LEFT OUTER JOIN games g ON u.uid = g.winner GROUP BY uid, username, email, password ORDER BY wins DESC LIMIT ?";
     private final String INSERT_GAME_QRY        = "INSERT INTO games (winner) VALUES (?)";
 
-    private PreparedStatement getUserByUidStat  = null;
-    private PreparedStatement getUserByNameStat = null;
-    private PreparedStatement insertUserStat    = null;
-    private PreparedStatement getRankingStat    = null;
-    private PreparedStatement insertGameStat    = null;
+    private PreparedStatement getUserByUidStat      = null;
+    private PreparedStatement getUserByEmailStat    = null;
+    private PreparedStatement getUserByNameStat     = null;
+    private PreparedStatement insertUserStat        = null;
+    private PreparedStatement getRankingStat        = null;
+    private PreparedStatement insertGameStat        = null;
 
     public static UsersAccess getInstance() throws SQLException, ClassNotFoundException {
         if (theInstance == null) {
@@ -87,6 +89,16 @@ public class UsersAccess extends DB_Access {
         getUserByUidStat.setInt(1, uid);
         ResultSet rs = getUserByUidStat.executeQuery();
         if (!rs.next()) throw new UnknownUserException(String.format("No user with uid %d found!", uid));
+        return User.fromResultSet(rs);
+    }
+
+    public User getUserByEmail(String email) throws SQLException, UnknownUserException {
+        if (getUserByEmailStat == null) {
+            getUserByEmailStat = db.getConnection().prepareStatement(GET_USER_BY_EMAIL_QRY);
+        }
+        getUserByEmailStat.setString(1, email);
+        ResultSet rs = getUserByEmailStat.executeQuery();
+        if (!rs.next()) throw new UnknownUserException(String.format("No user with email \"%s\" found!", email));
         return User.fromResultSet(rs);
     }
 
