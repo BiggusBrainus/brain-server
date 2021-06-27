@@ -8,6 +8,12 @@ import lombok.Data;
 import java.util.AbstractMap;
 import java.util.List;
 
+/**
+ * @version BigBrain v1
+ * @since 10.06.2021
+ * @author m4ttm00ny
+ */
+
 @Data
 public class EndOfGameResponse extends WebSocketResponse {
     private List<Rank> ranking;

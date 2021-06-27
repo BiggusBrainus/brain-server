@@ -8,6 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * @version BigBrain v1
+ * @since 12.05.2021
+ * @author m4ttm00ny
+ */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
